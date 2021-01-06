@@ -46,7 +46,7 @@
     </build>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/javaj-r/sfg-pet-clinic-intellij.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:javaj-r/sfg-pet-clinic-intellij.git</developerConnection>
       <tag>sfg-pet-clinic-intellij-0.0.3</tag>
   </scm>
 

@@ -2,15 +2,15 @@ package com.javid.springframework.sfgpetclinicintellij.services;
 
 import java.util.Set;
 
-public interface CrudService<T, ID> {
-
-    T findById(ID id);
-
-    T save(T entity);
+public interface CrudService<T, I> {
 
     Set<T> findAll();
 
+    T findById(I id);
+
+    T save(T entity);
+
     void delete(T entity);
 
-    void deleteById(ID id);
+    void deleteById(I id);
 }

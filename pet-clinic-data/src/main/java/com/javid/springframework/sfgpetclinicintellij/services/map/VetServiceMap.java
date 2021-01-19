@@ -3,9 +3,11 @@ package com.javid.springframework.sfgpetclinicintellij.services.map;
 
 import com.javid.springframework.sfgpetclinicintellij.model.Vet;
 import com.javid.springframework.sfgpetclinicintellij.services.VetService;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
 public class VetServiceMap extends AbstractServiceMap<Vet, Long> implements VetService {
 
     @Override

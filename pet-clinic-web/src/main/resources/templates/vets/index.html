@@ -3,10 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Vets</title>
+    <link rel="stylesheet" href="/css/table_dark.css">
 </head>
 <body>
-
+<!--/*@thymesVar id="vet" type="com.javid.springframework.sfgpetclinicintellij.model.Vet"*/-->
 <h1 th:text="'Vets List'"></h1>
+
+<table class="darkTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+    </tr>
+    </thead>
+    <tfoot>
+    <tr>
+        <td>&nbsp;&nbsp;—&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;—&nbsp;&nbsp;</td>
+        <td>&nbsp;&nbsp;—&nbsp;&nbsp;</td>
+    </tr>
+    </tfoot>
+    <tbody>
+    <tr th:each="vet : ${vets}">
+        <td th:text="${vet?.getId()}">0</td>
+        <td th:text="${vet?.getFirstName()}">-</td>
+        <td th:text="${vet?.getLastName()}">-</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>

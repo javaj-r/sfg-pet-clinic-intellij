@@ -22,26 +22,25 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Owner owner1 =  setPersonParam(new Owner(), 1L, "Michael", "Weston");
+        Owner owner1 =  setPersonParam(new Owner(), "Michael", "Weston");
         ownerService.save(owner1);
 
-        Owner owner2 =  setPersonParam(new Owner(), 2L, "Fiona", "Glen");
+        Owner owner2 =  setPersonParam(new Owner(), "Fiona", "Glen");
         ownerService.save(owner2);
 
         System.out.println("Loaded Owners........");
 
-        Vet vet1 = setPersonParam(new Vet(), 1L, "Sam", "Axe");
+        Vet vet1 = setPersonParam(new Vet(), "Sam", "Axe");
         vetService.save(vet1);
 
-        Vet vet2 = setPersonParam(new Vet(), 2L, "Alex", "Owens");
+        Vet vet2 = setPersonParam(new Vet(), "Alex", "Owens");
         vetService.save(vet2);
 
         System.out.println("Loaded Vets..........");
 
     }
 
-    private <T extends Person> T setPersonParam(T t, long id, String fName, String lName) {
-        t.setId(id);
+    private <T extends Person> T setPersonParam(T t, String fName, String lName) {
         t.setFirstName(fName);
         t.setLastName(lName);
         return t;

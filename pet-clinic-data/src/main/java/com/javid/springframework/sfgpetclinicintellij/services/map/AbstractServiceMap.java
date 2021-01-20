@@ -1,13 +1,13 @@
 package com.javid.springframework.sfgpetclinicintellij.services.map;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import com.javid.springframework.sfgpetclinicintellij.model.BaseEntity;
 
-abstract class AbstractServiceMap<T, I> {
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
-    Map<I, T> map = new HashMap<>();
+abstract class AbstractServiceMap<T extends BaseEntity, I extends Long> {
+
+    Map<Long, T> map = new HashMap<>();
 
     Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -17,9 +17,21 @@ abstract class AbstractServiceMap<T, I> {
         return map.get(id);
     }
 
-    T save(I id, T entity) {
-        map.put(id, entity);
+    private static class NullEntityException extends RuntimeException {
+        public NullEntityException(String s) {
+            super(s);
+        }
+    }
 
+    T save(T entity) {
+        if (entity != null) {
+            if (entity.getId() == null) {
+                entity.setId(getNextId());
+            }
+            map.put(entity.getId(), entity);
+        } else {
+            throw new NullEntityException("entity cannot be null");
+        }
         return entity;
     }
 
@@ -29,5 +41,15 @@ abstract class AbstractServiceMap<T, I> {
 
     void deleteById(I id) {
         map.remove(id);
+    }
+
+    private Long getNextId() {
+        AtomicLong nextId = new AtomicLong();
+        try {
+            nextId.set((long) Collections.max(map.keySet()) + 1);
+        } catch (NoSuchElementException e) {
+            nextId.set(1L);
+        }
+        return nextId.get();
     }
 }

@@ -13,9 +13,9 @@
 <table id="owners" class="table table-striped">
     <thead>
     <tr>
-        <th>ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th style="width: 150px;">ID</th>
+        <th style="width: 150px;">First Name</th>
+        <th style="width: 150px;">Last Name</th>
     </tr>
     </thead>
     <tfoot>
@@ -27,7 +27,7 @@
     </tfoot>
     <tbody>
     <tr th:each="owner : ${owners}">
-        <td th:text="${owner?.getId()}">0</td>
+        <td  th:text="${owner?.getId()}">0</td>
         <td th:text="${owner?.getFirstName()}">-</td>
         <td th:text="${owner?.getLastName()}">-</td>
     </tr>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body}, 'owners')}">
 <head>
     <meta charset="UTF-8">
-    <title>Vets</title>
-    <link rel="stylesheet" href="/css/table_dark.css">
+    <title>Pet Owners List</title>
 </head>
 
 <body>
 <!--/*@thymesVar id="owner" type="com.javid.springframework.sfgpetclinicintellij.model.Owner"*/-->
-<h1 th:text="'Owners List'"></h1>
+<h2 th:text="#{owners}"></h2>
 
-<table class="darkTable">
+<table id="owners" class="table table-striped">
     <thead>
     <tr>
         <th>ID</th>

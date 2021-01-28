@@ -41,9 +41,12 @@ public class OwnerServiceMap extends AbstractServiceMap<Owner, Long> implements 
             try {
                 entity.getPets().forEach(pet -> {
                     if (pet.getType() != null && pet.getType().getId() == null) {
-                        petTypeService.save(pet.getType());
+                        pet.setType(petTypeService.save(pet.getType()));
                     } else if (pet.getType() == null) {
                         throw new NullEntityException("Pet Type is required!");
+                    }
+                    if (pet.getId() == null) {
+                        pet.setId(petService.save(pet).getId());
                     }
                 });
             } catch (NullPointerException e) {

@@ -17,12 +17,6 @@ abstract class AbstractServiceMap<T extends BaseEntity, I extends Long> {
         return map.get(id);
     }
 
-    private static class NullEntityException extends RuntimeException {
-        public NullEntityException(String s) {
-            super(s);
-        }
-    }
-
     T save(T entity) {
         if (entity != null) {
             if (entity.getId() == null) {
@@ -51,5 +45,11 @@ abstract class AbstractServiceMap<T extends BaseEntity, I extends Long> {
             nextId.set(1L);
         }
         return nextId.get();
+    }
+
+    static class NullEntityException extends RuntimeException {
+        public NullEntityException(String s) {
+            super(s);
+        }
     }
 }

@@ -1,10 +1,7 @@
 package com.javid.springframework.sfgpetclinicintellij.bootstrap;
 
 import com.javid.springframework.sfgpetclinicintellij.model.*;
-import com.javid.springframework.sfgpetclinicintellij.services.OwnerService;
-import com.javid.springframework.sfgpetclinicintellij.services.PetTypeService;
-import com.javid.springframework.sfgpetclinicintellij.services.SpecialtyService;
-import com.javid.springframework.sfgpetclinicintellij.services.VetService;
+import com.javid.springframework.sfgpetclinicintellij.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,19 +14,21 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialtyService specialtyService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialtyService = specialtyService;
+        this.visitService = visitService;
     }
 
     @Override
     public void run(String... args) {
 
         if (petTypeService.findAll().isEmpty()) {
-            new DataLoaderUtil(ownerService, vetService, petTypeService, specialtyService).loadData();
+            new DataLoaderUtil(ownerService, vetService, petTypeService, specialtyService, visitService).loadData();
         }
 
     }
@@ -40,12 +39,14 @@ public class DataLoader implements CommandLineRunner {
         private final VetService vetService;
         private final PetTypeService petTypeService;
         private final SpecialtyService specialtyService;
+        private final VisitService visitService;
 
-        public DataLoaderUtil(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService) {
+        public DataLoaderUtil(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, VisitService visitService) {
             this.ownerService = ownerService;
             this.vetService = vetService;
             this.petTypeService = petTypeService;
             this.specialtyService = specialtyService;
+            this.visitService = visitService;
         }
 
         private void loadData() {
@@ -68,12 +69,16 @@ public class DataLoader implements CommandLineRunner {
             Pet mikesDog = setPet(LocalDate.now(), dog, owner1, "Rosco");
             owner1.getPets().add(mikesDog);
             ownerService.save(owner1);
+            Visit dogVisit = visitService.save(setVisit(LocalDate.now(), "Weak Dog", mikesDog));
+            mikesDog.getVisits().add(dogVisit);
 
             Owner owner2 = setOwner("Fiona", "Glen",
                     "258 Hagen St", "Miami", "9879879510");
             Pet fionasCat = setPet(LocalDate.now(), cat, owner2, "Black Cat");
             owner2.getPets().add(fionasCat);
             ownerService.save(owner2);
+            Visit catVisit = visitService.save(setVisit(LocalDate.now(), "Sneezy Cat", fionasCat));
+            fionasCat.getVisits().add(catVisit);
 
             System.out.println("Loaded Owners........");
 
@@ -123,6 +128,15 @@ public class DataLoader implements CommandLineRunner {
             Specialty specialty = new Specialty();
             specialty.setDescription(description);
             return specialty;
+        }
+
+        private Visit setVisit(LocalDate date, String description, Pet pet) {
+            Visit visit = new Visit();
+            visit.setDate(date);
+            visit.setDescription(description);
+            visit.setPet(pet);
+            return visit;
+
         }
     }
 }

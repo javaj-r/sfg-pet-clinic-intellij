@@ -3,21 +3,19 @@ package com.javid.springframework.sfgpetclinicintellij.services.jpa;
 import com.javid.springframework.sfgpetclinicintellij.model.Specialty;
 import com.javid.springframework.sfgpetclinicintellij.repositories.SpecialtyRepository;
 import com.javid.springframework.sfgpetclinicintellij.services.SpecialtyService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile("spring_data_jpa")
 public class SpecialtyJpaService implements SpecialtyService {
 
     private final SpecialtyRepository repository;
-
-    public SpecialtyJpaService(SpecialtyRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Set<Specialty> findAll() {

@@ -4,23 +4,20 @@ import com.javid.springframework.sfgpetclinicintellij.model.Owner;
 import com.javid.springframework.sfgpetclinicintellij.services.OwnerService;
 import com.javid.springframework.sfgpetclinicintellij.services.PetService;
 import com.javid.springframework.sfgpetclinicintellij.services.PetTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile({"default", "map"})
 public class OwnerServiceMap extends AbstractServiceMap<Owner, Long> implements OwnerService {
 
     private final PetTypeService petTypeService;
     private final PetService petService;
-
-    public OwnerServiceMap(PetTypeService petTypeService, PetService petService) {
-        this.petTypeService = petTypeService;
-        this.petService = petService;
-    }
 
     @Override
     public Set<Owner> findAll() {

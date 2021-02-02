@@ -3,21 +3,19 @@ package com.javid.springframework.sfgpetclinicintellij.services.jpa;
 import com.javid.springframework.sfgpetclinicintellij.model.Visit;
 import com.javid.springframework.sfgpetclinicintellij.repositories.VisitRepository;
 import com.javid.springframework.sfgpetclinicintellij.services.VisitService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile("spring_data_jpa")
 public class VisitJpaService implements VisitService {
 
     private final VisitRepository repository;
-
-    public VisitJpaService(VisitRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Set<Visit> findAll() {

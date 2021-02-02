@@ -2,11 +2,18 @@ package com.javid.springframework.sfgpetclinicintellij.bootstrap;
 
 import com.javid.springframework.sfgpetclinicintellij.model.*;
 import com.javid.springframework.sfgpetclinicintellij.services.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -16,127 +23,105 @@ public class DataLoader implements CommandLineRunner {
     private final SpecialtyService specialtyService;
     private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, VisitService visitService) {
-        this.ownerService = ownerService;
-        this.vetService = vetService;
-        this.petTypeService = petTypeService;
-        this.specialtyService = specialtyService;
-        this.visitService = visitService;
-    }
-
     @Override
     public void run(String... args) {
 
         if (petTypeService.findAll().isEmpty()) {
-            new DataLoaderUtil(ownerService, vetService, petTypeService, specialtyService, visitService).loadData();
+            new DataLoaderUtil().loadData();
         }
 
     }
 
-    private static class DataLoaderUtil {
-
-        private final OwnerService ownerService;
-        private final VetService vetService;
-        private final PetTypeService petTypeService;
-        private final SpecialtyService specialtyService;
-        private final VisitService visitService;
-
-        public DataLoaderUtil(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, VisitService visitService) {
-            this.ownerService = ownerService;
-            this.vetService = vetService;
-            this.petTypeService = petTypeService;
-            this.specialtyService = specialtyService;
-            this.visitService = visitService;
-        }
+    private class DataLoaderUtil {
 
         private void loadData() {
 
-            PetType dog = petTypeService.save(setPetType("Dog"));
-            PetType cat = petTypeService.save(setPetType("Cat"));
-            PetType hamster = petTypeService.save(setPetType("Hamster"));
-            PetType canary = petTypeService.save(setPetType("Canary"));
+            val dog = petTypeService.save(setPetType("Dog"));
+            val cat = petTypeService.save(setPetType("Cat"));
+            val hamster = petTypeService.save(setPetType("Hamster"));
+            val canary = petTypeService.save(setPetType("Canary"));
 
-            System.out.println("Loaded PetTypes......");
+            log.debug("Loaded PetTypes......");
 
-            Specialty radiology = specialtyService.save(setSpecialty("Radiology"));
-            Specialty surgery = specialtyService.save(setSpecialty("Surgery"));
-            Specialty dentistry = specialtyService.save(setSpecialty("Dentistry"));
+            val radiology = specialtyService.save(setSpecialty("Radiology"));
+            val surgery = specialtyService.save(setSpecialty("Surgery"));
+            val dentistry = specialtyService.save(setSpecialty("Dentistry"));
 
-            System.out.println("Loaded Specialties...");
+            log.debug("Loaded Specialties...");
 
-            Owner owner1 = setOwner("Michael", "Weston",
-                    "123 Jones St", "Miami", "1231231234");
-            Pet mikesDog = setPet(LocalDate.now(), dog, owner1, "Rosco");
-            owner1.getPets().add(mikesDog);
+            val owner1 = setOwner("Michael", "Weston", "123 Jones St", "Miami", "1231231234");
+            val mikesDog = setPet(LocalDate.now(), dog, owner1, "Rosco");
+            owner1.addPets(mikesDog);
+
             ownerService.save(owner1);
-            Visit dogVisit = visitService.save(setVisit(LocalDate.now(), "Weak Dog", mikesDog));
-            mikesDog.getVisits().add(dogVisit);
 
-            Owner owner2 = setOwner("Fiona", "Glen",
-                    "258 Hagen St", "Miami", "9879879510");
-            Pet fionasCat = setPet(LocalDate.now(), cat, owner2, "Black Cat");
-            owner2.getPets().add(fionasCat);
+            val dogVisit = setVisit(LocalDate.now(), "Weak Dog", mikesDog);
+            visitService.save(dogVisit);
+            mikesDog.addVisits(dogVisit);
+
+            val owner2 = setOwner("Fiona", "Glen", "258 Hagen St", "Miami", "9879879510");
+            val fionasCat = setPet(LocalDate.now(), cat, owner2, "Black Cat");
+            owner2.addPets(fionasCat);
+
             ownerService.save(owner2);
-            Visit catVisit = visitService.save(setVisit(LocalDate.now(), "Sneezy Cat", fionasCat));
-            fionasCat.getVisits().add(catVisit);
 
-            System.out.println("Loaded Owners........");
+            val catVisit = setVisit(LocalDate.now(), "Sneezy Cat", fionasCat);
+            visitService.save(catVisit);
+            fionasCat.addVisits(catVisit);
 
-            Vet vet1 = vetService.save(setVet("Sam", "Axe", radiology));
-            Vet vet2 = vetService.save(setVet("Alex", "Owens", surgery));
+            log.debug("Loaded Owners........");
 
-            System.out.println("Loaded Vets..........");
+            val vet1 = setVet("Sam", "Axe", radiology);
+            vetService.save(vet1);
 
-        }
+            val vet2 = setVet("Alex", "Owens", surgery);
+            vetService.save(vet2);
 
-        private <T extends Person> T setPersonParam(T t, String fName, String lName) {
-            t.setFirstName(fName);
-            t.setLastName(lName);
-            return t;
+            log.debug("Loaded Vets..........");
+
         }
 
         private Owner setOwner(String fName, String lName, String address, String city, String phone) {
-            Owner owner = setPersonParam(new Owner(), fName, lName);
-            owner.setAddress(address);
-            owner.setCity(city);
-            owner.setTelephone(phone);
-            return owner;
+            return Owner.builder()
+                    .firstName(fName)
+                    .lastName(lName)
+                    .address(address)
+                    .city(city)
+                    .telephone(phone)
+                    .build();
         }
 
-        private Vet setVet(String fName, String lName, Specialty specialty) {
-            Vet vet = setPersonParam(new Vet(), fName, lName);
-            vet.getSpecialties().add(specialty);
-            return vet;
+        private Vet setVet(String fName, String lName, Specialty... specialties) {
+            return Vet.builder()
+                    .firstName(fName)
+                    .lastName(lName)
+                    .specialties(new HashSet<>(Arrays.asList(specialties)))
+                    .build();
         }
 
         private PetType setPetType(String name) {
-            PetType petType = new PetType();
-            petType.setName(name);
-            return petType;
+            return new PetType().setName(name);
         }
 
         private Pet setPet(LocalDate birthDate, PetType type, Owner owner, String name) {
-            Pet pet = new Pet();
-            pet.setBirthDate(birthDate);
-            pet.setType(type);
-            pet.setOwner(owner);
-            pet.setName(name);
-            return pet;
+            return Pet.builder()
+                    .birthDate(birthDate)
+                    .type(type)
+                    .owner(owner)
+                    .name(name)
+                    .build();
         }
 
         private Specialty setSpecialty(String description) {
-            Specialty specialty = new Specialty();
-            specialty.setDescription(description);
-            return specialty;
+            return new Specialty().setDescription(description);
         }
 
         private Visit setVisit(LocalDate date, String description, Pet pet) {
-            Visit visit = new Visit();
-            visit.setDate(date);
-            visit.setDescription(description);
-            visit.setPet(pet);
-            return visit;
-
+            return Visit.builder()
+                    .date(date)
+                    .description(description)
+                    .pet(pet)
+                    .build();
         }
     }
 }

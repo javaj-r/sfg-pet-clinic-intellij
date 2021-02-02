@@ -3,21 +3,19 @@ package com.javid.springframework.sfgpetclinicintellij.services.jpa;
 import com.javid.springframework.sfgpetclinicintellij.model.Owner;
 import com.javid.springframework.sfgpetclinicintellij.repositories.OwnerRepository;
 import com.javid.springframework.sfgpetclinicintellij.services.OwnerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile("spring_data_jpa")
 public class OwnerJpaService implements OwnerService {
 
     private final OwnerRepository repository;
-
-    public OwnerJpaService(OwnerRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Set<Owner> findAll() {

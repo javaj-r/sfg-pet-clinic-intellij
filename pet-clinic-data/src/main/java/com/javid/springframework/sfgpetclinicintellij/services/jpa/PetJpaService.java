@@ -3,21 +3,19 @@ package com.javid.springframework.sfgpetclinicintellij.services.jpa;
 import com.javid.springframework.sfgpetclinicintellij.model.Pet;
 import com.javid.springframework.sfgpetclinicintellij.repositories.PetRepository;
 import com.javid.springframework.sfgpetclinicintellij.services.PetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile("spring_data_jpa")
 public class PetJpaService implements PetService {
 
     private final PetRepository repository;
-
-    public PetJpaService(PetRepository repository) {
-        this.repository = repository;
-    }
 
     @Override
     public Set<Pet> findAll() {

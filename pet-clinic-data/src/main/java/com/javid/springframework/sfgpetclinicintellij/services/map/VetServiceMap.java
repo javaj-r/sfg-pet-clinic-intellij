@@ -4,21 +4,19 @@ package com.javid.springframework.sfgpetclinicintellij.services.map;
 import com.javid.springframework.sfgpetclinicintellij.model.Vet;
 import com.javid.springframework.sfgpetclinicintellij.services.SpecialtyService;
 import com.javid.springframework.sfgpetclinicintellij.services.VetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 @Profile({"default", "map"})
 public class VetServiceMap extends AbstractServiceMap<Vet, Long> implements VetService {
 
     private final SpecialtyService specialtyService;
-
-    public VetServiceMap(SpecialtyService specialtyService) {
-        this.specialtyService = specialtyService;
-    }
 
     @Override
     public Set<Vet> findAll() {

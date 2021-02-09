@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Profile({"default", "map"})
-public class OwnerServiceMap extends AbstractServiceMap<Owner, Long> implements OwnerService {
+public class OwnerMapService extends AbstractMapService<Owner, Long> implements OwnerService {
 
     private final PetTypeService petTypeService;
     private final PetService petService;
@@ -66,6 +67,16 @@ public class OwnerServiceMap extends AbstractServiceMap<Owner, Long> implements 
 
     @Override
     public Set<Owner> findByLastName(String lastName) {
-        return null;
+        return super.findAll().stream()
+                .filter(owner -> owner.getLastName() == lastName)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Owner findOneByLastName(String lastName) {
+        return super.findAll().stream()
+                .filter(owner -> owner.getLastName() == lastName)
+                .findFirst()
+                .orElse(null);
     }
 }

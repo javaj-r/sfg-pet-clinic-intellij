@@ -5,7 +5,7 @@ import com.javid.springframework.sfgpetclinicintellij.model.BaseEntity;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-abstract class AbstractServiceMap<T extends BaseEntity, I extends Long> {
+abstract class AbstractMapService<T extends BaseEntity, I extends Long> {
 
     Map<Long, T> map = new HashMap<>();
 

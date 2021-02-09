@@ -50,4 +50,9 @@ public class OwnerJpaService implements OwnerService {
         repository.findByLastName(lastName).forEach(owners::add);
         return owners;
     }
+
+    @Override
+    public Owner findOneByLastName(String lastName) {
+        return repository.findOneByLastName(lastName).orElse(null);
+    }
 }

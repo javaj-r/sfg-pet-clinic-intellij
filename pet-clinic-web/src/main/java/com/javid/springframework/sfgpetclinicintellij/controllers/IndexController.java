@@ -11,7 +11,7 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping({"owners/find", "oups"})
+    @RequestMapping({"oups"})
     public String notImplemented() {
         return "notimplemented";
     }

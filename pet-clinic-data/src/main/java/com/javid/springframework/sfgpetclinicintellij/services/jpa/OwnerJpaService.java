@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service
@@ -54,5 +56,12 @@ public class OwnerJpaService implements OwnerService {
     @Override
     public Owner findOneByLastName(String lastName) {
         return repository.findOneByLastName(lastName).orElse(null);
+    }
+
+    @Override
+    public Set<Owner> findByLastNameLike(String lastName) {
+        return StreamSupport
+                .stream(repository.findByLastNameLike(lastName).spliterator(), true)
+                .collect(Collectors.toSet());
     }
 }

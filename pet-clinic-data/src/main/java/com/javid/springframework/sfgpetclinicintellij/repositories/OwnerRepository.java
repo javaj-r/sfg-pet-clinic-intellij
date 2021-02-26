@@ -10,4 +10,6 @@ public interface OwnerRepository extends CrudRepository<Owner, Long> {
     Iterable<Owner> findByLastName(String lastName);
 
     Optional<Owner> findOneByLastName(String lastName);
+
+    Iterable<Owner> findByLastNameLike(String lastName);
 }

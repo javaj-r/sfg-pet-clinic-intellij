@@ -151,4 +151,16 @@ class OwnerJpaServiceTest {
         assertNull(owner);
         verify(ownerRepository).findOneByLastName(any());
     }
+
+    @Test
+    void findByLastNameLik() {
+        // given
+        Set<Owner> returnOwners = Set.of(alenSmith, benSmith);
+        when(ownerRepository.findByLastNameLike(anyString())).thenReturn(returnOwners);
+        // when
+        Set<Owner> owners = ownerJpaService.findByLastNameLike(LAST_NAME);
+        // then
+        assertEquals(2, owners.size());
+        verify(ownerRepository).findByLastNameLike(anyString());
+    }
 }

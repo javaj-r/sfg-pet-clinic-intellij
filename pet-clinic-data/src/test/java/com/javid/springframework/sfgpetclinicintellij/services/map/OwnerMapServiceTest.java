@@ -99,4 +99,19 @@ class OwnerMapServiceTest {
         Owner owner = ownerService.findOneByLastName("NotSaved");
         assertNull(owner);
     }
+
+
+    @Test
+    void findByLastNameLik() {
+        ownerService.save(Owner.builder().id(bId).lastName(bSmith).build());
+
+        Set<Owner> owners = ownerService.findByLastNameLike("mit");
+        Set<Long> idSet = owners.stream()
+                .map(Owner::getId)
+                .collect(Collectors.toSet());
+
+        assertEquals(2, owners.size());
+        assertTrue(idSet.contains(aId));
+        assertTrue(idSet.contains(bId));
+    }
 }

@@ -61,7 +61,7 @@ public class OwnerJpaService implements OwnerService {
     @Override
     public Set<Owner> findByLastNameLike(String lastName) {
         return StreamSupport
-                .stream(repository.findByLastNameLike(lastName).spliterator(), true)
+                .stream(repository.findByLastNameLike("%" + lastName + "%").spliterator(), true)
                 .collect(Collectors.toSet());
     }
 }

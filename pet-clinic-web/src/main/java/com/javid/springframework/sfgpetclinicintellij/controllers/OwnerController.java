@@ -7,11 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
+
 
 @RequiredArgsConstructor
 @RequestMapping("owners")
@@ -56,8 +56,42 @@ public class OwnerController {
     }
 
     @GetMapping({"{ownerId}"})
-    public ModelAndView showOwner(@PathVariable("ownerId") Long id) {
+    public ModelAndView showOwner(@PathVariable Long ownerId) {
         return new ModelAndView("owners/details")
-                .addObject(ownerService.findById(id));
+                .addObject(ownerService.findById(ownerId));
     }
+
+    @GetMapping("new")
+    public String getOwnerCreateForm(Model model) {
+        model.addAttribute("owner", Owner.builder().build());
+        return "owners/form";
+    }
+
+    @PostMapping("new")
+    public String processOwnerCreateForm(@Valid Owner owner, BindingResult result) {
+        if (result.hasErrors()) {
+            return "owners/form";
+        } else {
+            var savedOwner = ownerService.save(owner);
+            return String.format("redirect:/owners/%s", savedOwner.getId());
+        }
+    }
+
+    @GetMapping("{ownerId}/edit")
+    public String getOwnerUpdateForm(@PathVariable Long ownerId, Model model) {
+        model.addAttribute("owner", ownerService.findById(ownerId));
+        return "owners/form";
+    }
+
+    @PostMapping("{ownerId}/edit")
+    public String processOwnerUpdateForm(@Valid Owner owner, BindingResult result, @PathVariable Long ownerId) {
+        if (result.hasErrors()) {
+            return "owners/form";
+        } else {
+            owner.setId(ownerId);
+            var savedOwner = ownerService.save(owner);
+            return String.format("redirect:/owners/%s", savedOwner.getId());
+        }
+    }
+
 }

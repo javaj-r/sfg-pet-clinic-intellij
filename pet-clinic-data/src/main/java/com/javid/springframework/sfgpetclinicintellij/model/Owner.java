@@ -43,4 +43,23 @@ public class Owner extends Person {
         this.pets.addAll(Arrays.asList(pets));
         return this;
     }
+
+    public Pet getPet(String name) {
+        return getPet(name, false);
+    }
+
+    public Pet getPet(String name, boolean ignoreNew) {
+        name = name.toLowerCase();
+
+        for (Pet pet : pets) {
+            if (!ignoreNew || !pet.isNew()) {
+                var petName = pet.getName().toLowerCase();
+                if (petName.equals(name)) {
+                    return pet;
+                }
+            }
+        }
+
+        return null;
+    }
 }

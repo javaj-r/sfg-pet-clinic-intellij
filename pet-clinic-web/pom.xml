@@ -12,16 +12,11 @@
     <artifactId>pet-clinic-web</artifactId>
 
     <properties>
-        <!-- Generic properties -->
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-
         <!-- Web dependencies -->
         <webjars-jquery.version>3.5.1</webjars-jquery.version>
         <webjars-jquery-ui.version>1.12.1</webjars-jquery-ui.version>
         <webjars-bootstrap.version>3.3.6</webjars-bootstrap.version> <!-- error occurred on: 4.6.0 -->
         <wro4j.version>1.10.1</wro4j.version>
-
     </properties>
 
     <dependencies>

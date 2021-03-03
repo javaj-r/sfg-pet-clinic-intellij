@@ -29,6 +29,7 @@ public class PetController {
     private final PetTypeService petTypeService;
     private final OwnerService ownerService;
     private final PetService petService;
+    private final String PETS_FORM = "pets/form";
 
     @ModelAttribute("petTypes")
     public Collection<PetType> populatePetTypes() {
@@ -51,7 +52,7 @@ public class PetController {
         owner.addPets(pet);
         model.addAttribute("pet",  pet);
 
-        return "pets/form";
+        return PETS_FORM;
     }
 
     @PostMapping("pets/new")
@@ -63,7 +64,7 @@ public class PetController {
         owner.addPets(pet);
         if (result.hasErrors()) {
             model.addAttribute("pet", pet);
-            return "pets/form";
+            return PETS_FORM;
         } else {
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
@@ -74,7 +75,7 @@ public class PetController {
     public String getPetUpdateForm(@PathVariable Long petId, Model model) {
         model.addAttribute("pet", petService.findById(petId));
 
-        return "pets/form";
+        return PETS_FORM;
     }
 
     @PostMapping("pets/{petId}/edit")
@@ -82,9 +83,8 @@ public class PetController {
         if (result.hasErrors()) {
             pet.setOwner(owner);
             model.addAttribute("pet", pet);
-            return "pets/form";
+            return PETS_FORM;
         } else {
-        owner.addPets(pet);
             owner.addPets(pet);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();

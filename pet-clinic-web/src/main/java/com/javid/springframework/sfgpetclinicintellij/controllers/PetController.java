@@ -29,7 +29,7 @@ public class PetController {
     private final PetTypeService petTypeService;
     private final OwnerService ownerService;
     private final PetService petService;
-    private final String PETS_FORM = "pets/form";
+    private static final String PETS_FORM = "pets/form";
 
     @ModelAttribute("petTypes")
     public Collection<PetType> populatePetTypes() {
@@ -42,15 +42,14 @@ public class PetController {
     }
 
     @InitBinder("owner")
-    public void initPetBinder(WebDataBinder dataBinder) {
+    public void initOwnerBinder(WebDataBinder dataBinder) {
         dataBinder.setDisallowedFields("id");
     }
 
     @GetMapping("pets/new")
     public String getPetCreateForm(Owner owner, Model model) {
         var pet = Pet.builder().owner(owner).build();
-        owner.addPets(pet);
-        model.addAttribute("pet",  pet);
+        model.addAttribute("pet", pet);
 
         return PETS_FORM;
     }
@@ -61,11 +60,12 @@ public class PetController {
             result.rejectValue("name", "duplicate", "already exists");
         }
 
-        owner.addPets(pet);
+        pet.setOwner(owner);
         if (result.hasErrors()) {
             model.addAttribute("pet", pet);
             return PETS_FORM;
         } else {
+            owner.addPets(pet);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
         }
@@ -85,7 +85,7 @@ public class PetController {
             model.addAttribute("pet", pet);
             return PETS_FORM;
         } else {
-            owner.addPets(pet);
+            pet.setOwner(owner);
             petService.save(pet);
             return "redirect:/owners/" + owner.getId();
         }

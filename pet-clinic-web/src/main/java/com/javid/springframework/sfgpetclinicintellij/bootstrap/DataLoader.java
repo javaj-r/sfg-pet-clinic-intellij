@@ -74,7 +74,7 @@ public class DataLoader implements CommandLineRunner {
             val vet1 = setVet("Sam", "Axe", radiology);
             vetService.save(vet1);
 
-            val vet2 = setVet("Alex", "Owens", surgery);
+            val vet2 = setVet("Alex", "Owens", surgery, dentistry, radiology);
             vetService.save(vet2);
 
             log.debug("Loaded Vets..........");

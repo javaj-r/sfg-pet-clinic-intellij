@@ -43,4 +43,9 @@ public class PetJpaService implements PetService {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public boolean isExists(Pet pet) {
+        return repository.findFirstByNameAndOwner_Id(pet.getName(), pet.getOwner().getId()).isPresent();
+    }
 }

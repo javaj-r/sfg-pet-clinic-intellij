@@ -9,7 +9,6 @@ import com.javid.springframework.sfgpetclinicintellij.services.PetTypeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -48,27 +47,27 @@ public class PetController {
 
     @GetMapping("pets/new")
     public String getPetCreateForm(Owner owner, Model model) {
-        var pet = Pet.builder().owner(owner).build();
+        var pet = new Pet();
+        pet.setOwner(owner);
         model.addAttribute("pet", pet);
-
         return PETS_FORM;
     }
 
     @PostMapping("pets/new")
     public String processPetCreateForm(Owner owner, @Valid Pet pet, BindingResult result, Model model) {
-        if (StringUtils.hasLength(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
+        pet.setOwner(owner);
+
+        if (petService.isExists(pet)) {
             result.rejectValue("name", "duplicate", "already exists");
         }
-
-        pet.setOwner(owner);
         if (result.hasErrors()) {
             model.addAttribute("pet", pet);
             return PETS_FORM;
-        } else {
-            owner.addPets(pet);
-            petService.save(pet);
-            return "redirect:/owners/" + owner.getId();
         }
+
+        owner.addPets(pet);
+        petService.save(pet);
+        return "redirect:/owners/" + owner.getId();
     }
 
     @GetMapping("pets/{petId}/edit")

@@ -35,4 +35,13 @@ public class PetMapService extends AbstractMapService<Pet, Long> implements PetS
     public Pet findById(Long id) {
         return super.findById(id);
     }
+
+    @Override
+    public boolean isExists(Pet pet) throws NullPointerException {
+            final var name = pet.getName();
+            final var ownerId = pet.getOwner().getId();
+            return findAll().stream()
+                    .filter(p -> name.equals(p.getName()))
+                    .anyMatch(p -> ownerId.equals(p.getId()));
+    }
 }
